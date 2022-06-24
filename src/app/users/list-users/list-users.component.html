@@ -1,0 +1,49 @@
+<div class="container">
+    <h1>Lista de Usuarios</h1>
+    <br>
+    <div class="row mb-3">
+        <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+            <input class="form-control" type="text" placeholder="Buscar cedula" #txtFind (keyup.enter)="findText()" />
+        </div>
+        <div class="col-md-8 col-sm-12 col-xs-12 text-end">
+            <a class=" btn btn-primary" routerLink="/users/create">Crear Usuario</a>
+        </div>
+    </div>
+    <br />
+
+    <table *ngIf="listUsers && listUsers.length > 0" class="table table-responsive">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Cedula</th>
+                <th scope="col">Ciudad</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let item of listUsers; index as i">
+            <tr>
+                <td>{{i+1}}</td>
+                <td>{{item.name | textUpper : true}}</td>
+                <td>{{item.identification}}</td>
+                <td>{{item.city | textUpper : false}}</td>
+                <td>{{item.idRole | roleName}}</td>
+                <td>
+                    <i class="fa fa-trash-o" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        (click)="onClickButtonDelete(item.id,i)">
+                    </i>
+                    <a href="users/edit/{{item.id}}">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-modal [value]="position" (response)="delete()">
+    <div *ngIf="position != null" class="modal-body">
+        Está seguro que desea eliminar el usuario : {{listUsers[position].name}} ?
+    </div>
+</app-modal>
